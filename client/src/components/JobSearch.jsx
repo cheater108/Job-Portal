@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import searchIcon from "../assets/search.png";
 import isLoggedIn from "../utils/isLoggedIn";
 import { useNavigate } from "react-router-dom";
+import searchJobs from "../api/searchJobs";
+import getJobs from "../api/getJobs";
 
-function JobSearch() {
+function JobSearch({ setJobs }) {
     const [skills, setSkills] = useState([]);
     const [select, setSelect] = useState("Skills");
     const [search, setSearch] = useState("");
@@ -21,37 +23,52 @@ function JobSearch() {
     function handleEnter(e) {
         if (e.key === "Enter" || e.keyCode === 13) {
             if (select === "Skills" && search.length > 0) {
+                const skill = search.trim().toLowerCase();
                 setSkills((s) => {
-                    if (!s.includes(search.toLowerCase())) {
-                        return [...s, search.toLowerCase()];
+                    if (!s.includes(skill)) {
+                        return [...s, skill];
                     }
                     return s;
                 });
                 setSearch("");
+            } else if (select === "Jobs" && search.length > 0) {
+                searchJobs(search, skills).then((data) => setJobs(data));
             }
         }
     }
 
     function handleApply() {
         if (select === "Skills" && search.length > 0) {
+            const skill = search.trim().toLowerCase();
             setSkills((s) => {
-                if (!s.includes(search.toLowerCase())) {
-                    return [...s, search.toLowerCase()];
+                if (!s.includes(skill)) {
+                    return [...s, skill];
                 }
                 return s;
             });
             setSearch("");
+        } else if (select === "Jobs" && search.length > 0) {
+            searchJobs(search, skills).then((data) => setJobs(data));
         }
     }
 
     function handleClear() {
         setSearch("");
         setSkills([]);
+        getJobs().then((data) => setJobs(data));
     }
 
     function removeSkill(skill) {
         setSkills(skills.filter((s) => s !== skill));
+        searchJobs("skills", skills).then((data) => setJobs(data));
     }
+
+    useEffect(() => {
+        if (select === "Skills") {
+            searchJobs("skills", skills).then((data) => setJobs(data));
+        }
+    }, [skills]);
+
     return (
         <div className="w-full p-3 md:px-20 bg-white mt-5 shadow-3xl shadow-oshadow">
             <div>
@@ -95,10 +112,8 @@ function JobSearch() {
                         onChange={handleSelect}
                     >
                         <option value="Skills">Skills</option>
-                        <option value="Javascript">Javascript</option>
-                        <option value="HTML">HTML</option>
-                        <option value="CSS">CSS</option>
-                        <option value="React">React</option>
+                        {/* <option value="Javascript">Javascript</option>
+                        <option value="React">React</option> */}
                         <option value="Jobs">Jobs</option>
                     </select>
                     <div className="hidden lg:flex flex-1 gap-2 flex-wrap">

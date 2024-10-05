@@ -12,14 +12,13 @@ function HomePage() {
             // console.log(data);
             setJobs(data);
         }
-
         loadJobs();
     }, []);
     return (
         <div>
             <Navbar />
             <main className="p-2 md:w-8/12 md:m-auto flex flex-col items-center">
-                <JobSearch />
+                <JobSearch setJobs={setJobs} />
                 {jobs.map((job) => (
                     <JobCard
                         key={job._id}

@@ -19,7 +19,7 @@ const postJob = async (req, res) => {
 
     const { user } = req;
     // console.log(req.body);
-    const jobs = skills.split(",").map((skill) => skill.trim());
+    const jobs = skills.split(",").map((skill) => skill.trim().toLowerCase());
     // console.log(jobs);
     const job = new Job({
         name,
@@ -97,7 +97,9 @@ const editJob = async (req, res) => {
             skills,
             information,
         } = jobSchema.parse(req.body);
-        const jobSkills = skills?.split(",").map((skill) => skill.trim());
+        const jobSkills = skills
+            ?.split(",")
+            .map((skill) => skill.trim().toLowerCase());
         let job = await Job.findById(id);
         if (!job) {
             return res.status(404).json({ message: "Job not found" });
@@ -133,10 +135,25 @@ const editJob = async (req, res) => {
 
 const searchJobByTitle = async (req, res) => {
     const { title } = req.params;
-    const jobs = await Job.find({ name: new RegExp(title, "i") }).select(
-        "-_id -creator -about -information"
-    );
-    res.status(200).json(jobs);
+    const q = req.query;
+    if (title === "skills") {
+        const skills = q?.skills?.split(",");
+        const jobs = await Job.find({ skills: { $in: skills } });
+        return res.status(200).json(jobs);
+    }
+    if (Object.keys(q).length > 0) {
+        const skills = q?.skills?.split(",");
+        const jobs = await Job.find({
+            position: new RegExp(title, "i"),
+            skills: { $in: skills },
+        });
+        return res.status(200).json(jobs);
+    }
+
+    const jobs = await Job.find({ position: new RegExp(title, "i") });
+    return res.status(200).json(jobs);
+
+    // console.log(jobs);
 };
 
 module.exports = {
