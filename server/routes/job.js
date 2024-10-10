@@ -10,6 +10,7 @@ const {
     deleteJob,
     editJob,
     searchJobByTitle,
+    linkedInJobs,
 } = require("../controllers/jobControllers");
 
 router.post("/", authMiddleware, catchAsync(postJob));
@@ -20,5 +21,7 @@ router.delete("/:id", authMiddleware, catchAsync(deleteJob));
 router.put("/:id", authMiddleware, catchAsync(editJob));
 // TODO: add skills also
 router.get("/search/:title", catchAsync(searchJobByTitle));
+
+router.get("/linkedin/:name", catchAsync(linkedInJobs));
 
 module.exports = router;

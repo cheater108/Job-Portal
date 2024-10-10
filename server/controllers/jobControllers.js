@@ -1,6 +1,7 @@
 const { Job } = require("../schema/job.schema");
 const isAuth = require("../utils/index");
 const { jobSchema } = require("../utils/validationSchema");
+const getLinkedInJobs = require("../utils/getLinkedInJobs");
 
 const postJob = async (req, res) => {
     const {
@@ -156,6 +157,12 @@ const searchJobByTitle = async (req, res) => {
     // console.log(jobs);
 };
 
+const linkedInJobs = async (req, res) => {
+    const { name } = req.params;
+    const data = await getLinkedInJobs(name);
+    res.json(data);
+};
+
 module.exports = {
     postJob,
     getJobs,
@@ -163,4 +170,5 @@ module.exports = {
     deleteJob,
     editJob,
     searchJobByTitle,
+    linkedInJobs,
 };

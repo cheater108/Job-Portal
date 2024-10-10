@@ -19,6 +19,7 @@ export default {
             boxShadow: {
                 "3xl": "0px 0px 22px 4px rgba(0,0,0,0.3)",
                 "4xl": "0px 2px 35px 1px #0000001A",
+                linked: "0px 2px 35px 1px #0077B5",
             },
         },
     },

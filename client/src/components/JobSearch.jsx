@@ -4,8 +4,9 @@ import isLoggedIn from "../utils/isLoggedIn";
 import { useNavigate } from "react-router-dom";
 import searchJobs from "../api/searchJobs";
 import getJobs from "../api/getJobs";
+import getLinkedInJobs from "../api/getLinkedInJobs";
 
-function JobSearch({ setJobs }) {
+function JobSearch({ setJobs, setLinkedinJobs }) {
     const [skills, setSkills] = useState([]);
     const [select, setSelect] = useState("Skills");
     const [search, setSearch] = useState("");
@@ -33,6 +34,9 @@ function JobSearch({ setJobs }) {
                 setSearch("");
             } else if (select === "Jobs" && search.length > 0) {
                 searchJobs(search, skills).then((data) => setJobs(data));
+                getLinkedInJobs(search).then((resp) =>
+                    setLinkedinJobs(resp.data)
+                );
             }
         }
     }
@@ -49,12 +53,14 @@ function JobSearch({ setJobs }) {
             setSearch("");
         } else if (select === "Jobs" && search.length > 0) {
             searchJobs(search, skills).then((data) => setJobs(data));
+            getLinkedInJobs(search).then((resp) => setLinkedinJobs(resp.data));
         }
     }
 
     function handleClear() {
         setSearch("");
         setSkills([]);
+        setLinkedinJobs([]);
         getJobs().then((data) => setJobs(data));
     }
 
