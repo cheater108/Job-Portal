@@ -16,7 +16,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/user" element={<UserPage />}>
-                    <Route path="login" element={<LoginForm />} />
+                    <Route index element={<LoginForm />} />
+                    <Route index path="login" element={<LoginForm />} />
                     <Route path="register" element={<RegisterForm />} />
                 </Route>
                 <Route path="/view/:jobId" element={<ViewJob />} />

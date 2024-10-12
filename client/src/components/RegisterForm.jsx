@@ -40,7 +40,7 @@ function RegisterForm() {
                 }),
         },
         number: {
-            message: "Number must be equal or greater than 10",
+            message: "Must be a valid number with length > 10",
             valid: formData.number.length >= 10,
             error: () =>
                 setError((err) => {
@@ -48,7 +48,8 @@ function RegisterForm() {
                 }),
         },
         password: {
-            message: "Invalid password",
+            message:
+                "Invalid password, must have atleast 8 char, Alphanumeric, capital and small letter and one special char [@$!%*?&#]",
             valid: isValidPassword(formData.password),
             error: () =>
                 setError((err) => {
@@ -199,7 +200,7 @@ function RegisterForm() {
                     className="bg-orange p-2 px-4 w-2/5 rounded-sm text-white font-bold mt-5"
                     onClick={handleSubmit}
                 >
-                    Sign in
+                    Sign up
                 </button>
             </form>
             <div className="flex gap-2 mt-4">
